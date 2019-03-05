@@ -7,7 +7,13 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var fe = require('./util/fe')
+var readline = require('./util/readline')
+
 var app = express();
+
+// init share folder
+fe.init()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
