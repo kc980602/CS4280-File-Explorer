@@ -2,17 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b86d81e2-4ce3-4f59-8e97-839b54c88fca" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/DataClass.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/share/123.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/share/234.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/share/345.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/readline.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/share/123/123.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/share/123/234.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/share/123/345.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/share/123123123123123123123123123123123.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/util/fe.js" beforeDir="false" afterPath="$PROJECT_DIR$/util/fe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/readline.js" beforeDir="false" afterPath="$PROJECT_DIR$/util/readline.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -43,20 +39,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/fe.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+            <state relative-caret-position="140">
+              <caret line="31" column="46" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/util/readline.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="19" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="19" />
+            <state relative-caret-position="223">
+              <caret line="39" column="49" lean-forward="true" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -74,6 +70,8 @@
     <findStrings>
       <find>console</find>
       <find>readDir</find>
+      <find>baseFolderURL</find>
+      <find>currPath</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -112,6 +110,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -132,13 +131,18 @@
             <path>
               <item name="CS4280-File-Explorer" type="b2602c69:ProjectViewProjectNode" />
               <item name="CS4280-File-Explorer" type="462c0819:PsiDirectoryNode" />
+              <item name="share" type="462c0819:PsiDirectoryNode" />
+              <item name="123" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CS4280-File-Explorer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CS4280-File-Explorer" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -152,6 +156,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/share/123" />
       <recent name="$PROJECT_DIR$/share" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -179,12 +184,14 @@
       <option name="presentableId" value="Default" />
       <updated>1551686400358</updated>
       <workItem from="1551686401587" duration="11448000" />
-      <workItem from="1551749937811" duration="8666000" />
+      <workItem from="1551749937811" duration="13605000" />
+      <workItem from="1551804587017" duration="439000" />
+      <workItem from="1551805486613" duration="4098000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20114000" />
+    <option name="totallyTimeSpent" value="29590000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -197,6 +204,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1057" width="1920" height="1006" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49579832" visible="true" weight="0.1864139" />
       <window_info id="Structure" order="1" sideWeight="0.5042017" side_tool="true" weight="0.24947146" />
@@ -210,7 +218,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32970026" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.31619257" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.3501094" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -229,15 +237,16 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/share/abc.txt" />
-    <entry file="file://$PROJECT_DIR$/share/a.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/share/a.txt" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/share/123.txt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -246,9 +255,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/share/123.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/DataClass.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -256,17 +262,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/readline.js">
+    <entry file="file://$PROJECT_DIR$/util/fe.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="19" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="19" />
+        <state relative-caret-position="140">
+          <caret line="31" column="46" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/fe.js">
+    <entry file="file://$PROJECT_DIR$/util/readline.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        <state relative-caret-position="223">
+          <caret line="39" column="49" lean-forward="true" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
         </state>
       </provider>
     </entry>

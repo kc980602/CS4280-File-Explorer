@@ -4,14 +4,13 @@ const moment = require('moment')
 const FileItem = require('../data/DataClass')
 const columnify = require('columnify');
 
-
 const appDir = path.dirname(require.main.filename);
-
-const baseFolderURL = `${appDir}/../share`
+const baseFolderURL = `${appDir}/../share/`
 
 async function init() {
-    const data = await readDir(baseFolderURL)
-    console.log('// Directory Content')
+
+    console.log()
+    const data = await readDir()
     printDir(data)
 }
 
@@ -22,16 +21,21 @@ async function checkShareFolder() {
     }
 }
 
-function checkFolderExist(path = baseFolderURL) {
+function checkFolderExist(path) {
     return fs.existsSync(path)
 }
 
-async function readDir(path) {
-    await checkShareFolder()
+async function readDir(target = '') {
     const records = []
-    const files = fs.readdirSync(path)
+    const targetDir = baseFolderURL + target
+    console.log(await checkFolderExist(targetDir))
+     if (!await checkFolderExist(targetDir)) {
+        return false
+    }
+
+    const files = fs.readdirSync(targetDir)
     files.forEach(file => {
-        records.push(() => fileStat(path, file))
+        records.push(() => fileStat(targetDir, file))
     })
     const recPromises = records.map(task => task())
     return Promise.all(recPromises).then(result => {
@@ -54,6 +58,7 @@ function makeDir(path) {
 }
 
 function printDir(records) {
+    console.log('// Directory Content')
     console.log(columnify(records))
 }
 
@@ -62,5 +67,6 @@ module.exports = {
     checkShareFolder,
     checkFolderExist,
     readDir,
-    makeDir
+    makeDir,
+    printDir
 }
