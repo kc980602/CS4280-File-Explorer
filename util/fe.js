@@ -8,8 +8,7 @@ const appDir = path.dirname(require.main.filename);
 const baseFolderURL = `${appDir}/../share/`
 
 async function init() {
-
-    console.log()
+    await checkShareFolder()
     const data = await readDir()
     printDir(data)
 }
@@ -17,7 +16,7 @@ async function init() {
 async function checkShareFolder() {
     if (!fs.existsSync(baseFolderURL)) {
         console.log('share folder created')
-        makeDir(baseFolderURL)
+        makeDir()
     }
 }
 
@@ -25,13 +24,19 @@ function checkFolderExist(path) {
     return fs.existsSync(path)
 }
 
+function checkIsSubConFolder(target) {
+    const relative = path.relative(baseFolderURL, target);
+    return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+}
+
 async function readDir(target = '') {
     const records = []
-    const targetDir = baseFolderURL + target
-    console.log(await checkFolderExist(targetDir))
-     if (!await checkFolderExist(targetDir)) {
+    let targetDir = baseFolderURL + target
+    if (!await checkFolderExist(targetDir)) {
         return false
     }
+    if (!checkIsSubConFolder(targetDir))
+        targetDir = baseFolderURL
 
     const files = fs.readdirSync(targetDir)
     files.forEach(file => {
@@ -51,11 +56,22 @@ function fileStat(basePath, file) {
     })
 }
 
-function makeDir(path) {
-    fs.mkdir(path, {recursive: true}, (err) => {
-        if (err) console.error('Fail to create folder.', err)
+function makeDir(path = '') {
+    fs.mkdir(baseFolderURL + path, {recursive: true}, (err) => {
+        console.log('sdfsd', err, !err)
+        return !err
     })
 }
+async function createDirectory(path = '') {
+    return new Promise(async (resolve, reject) => {
+        fs.mkdir(baseFolderURL + path, {recursive: true}, (err) => {
+            if (err) reject(err);
+            else resolve();
+        })
+    }).then(() => true, err => false)
+
+}
+
 
 function printDir(records) {
     console.log('// Directory Content')
@@ -68,5 +84,6 @@ module.exports = {
     checkFolderExist,
     readDir,
     makeDir,
+    createDirectory,
     printDir
 }

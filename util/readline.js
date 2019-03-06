@@ -13,7 +13,6 @@ const rl = readline.createInterface({
 
 rl.on('line', (input) => {
     const cmdParts = input.split(' ')
-    console.log(cmdParts)
     switch (cmdParts[0]) {
         case 'dir':
             cmdReadDir(cmdParts)
@@ -25,6 +24,9 @@ rl.on('line', (input) => {
         case 'quit':
             process.exit(0);
             break
+        case 'ls':
+            console.log('Your are in: /' + currPath.join('/'))
+            break
         default:
             console.log('invalid command:\ndir [path]\ndel path\nrename path1 path2\nquit')
             break
@@ -33,23 +35,32 @@ rl.on('line', (input) => {
 
 async function cmdReadDir(cmdParts) {
     let target
-    if (cmdParts[1] !== undefined)
-        target = cmdParts[1].replace('%20', ' ').substr(0).replace('/', '')
-
-    if (target === '..'){
-        target = currPath.length === 0 ? '' : path.dirname(target)
-        console.log(target)
-    }
-    currPath.push(target)
-    var x = path.join(...currPath)
-    console.log(x)
-    const data = await fe.readDir(x)
-    if (data === false) {
-        currPath.pop()
-        console.log('cmdReadDir fail', data)
+    if (cmdParts[1] !== undefined) {
+        target = cmdParts[1].replace('%20', ' ')
+        target = target.replace(/^\//, '')
     } else {
+        console.log('Path not specified!')
+        return
+    }
 
+    let pathURL = path.join(...currPath, target)
+    if (target === '..' || target === '' || target.replace(/\//g, '') === '') {
+        currPath = []
+        pathURL = ''
+    }
+    const data = await fe.readDir(pathURL)
+    if (data === false) {
+        console.log('')
+        rl.question('folder does not exist, create new folder? Y/N\n', async (answer) => {
+            const ans = answer.toLowerCase()
+            if (ans === 'y' || ans === 'yes') {
+                let success = await fe.createDirectory(pathURL)
+                console.log(success ? 'File Created!' : 'Command Not Supported!')
+            }
+        })
+    } else {
+        currPath = pathURL === '' ? [] : pathURL.split('/')
         fe.printDir(data)
     }
-    console.log(currPath, root, target, x)
 }
+
