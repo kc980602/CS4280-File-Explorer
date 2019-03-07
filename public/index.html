@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <title>CS4280 Share Folder</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/vendor.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+</head>
+<body>
+<div id="app">
+
+    <div class="filemanager">
+        <a href="/"><img class="mb-3" src="img/sf-logo.svg" height="50px"/></a>
+        <div class="">
+            <div class="d-flex justify-content-between">
+                <div class="breadcrumbs">adadads</div>
+                <div class="form-inline">
+                    <input type="text" class="form-control mr-2" v-model="addDirName">
+                    <button class="btn btn-success iconbox shadow-success mr-2" @click="addDir()"><i class="fas fa-folder-plus"></i></button>
+                    <button class="btn btn-success iconbox shadow-success" @click="addDir()"><i class="fas fa-upload"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <ul class="data animated">
+            <li v-for="item of folder" class="folders p-3">
+                <div class="d-flex justify-content-between">
+                    <a :href="'/?path='+item.path" title="" class="files">
+                        <div class="media align-items-center">
+                            <span class="icon folder full mr-3"></span>
+                            <div class="media-body">
+                                <span class="name">{{item.name}}</span>
+                                <span class="details">{{bytesToSize(item.size)}}<br>{{item.dateModified}}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div>
+                        <button class="btn btn-sm btn-outline-info mb-1 float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-pen"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-trash"></i></button>
+                    </div>
+                </div>
+            </li><li
+                    v-for="item of file" class="files p-3">
+                <div class="d-flex justify-content-between">
+                    <a :href="'/?path='+item.path" title="" class="files">
+                        <div class="media align-items-center">
+                            <span class="icon file mr-3" :class="'f-' + getFileType(item.name)">{{getFileType(item.name)}}</span>
+                            <div class="media-body">
+                                <span class="name">{{item.name}}</span>
+                                <span class="details">{{bytesToSize(item.size)}}<br>{{item.dateModified}}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div>
+                        <button class="btn btn-sm btn-outline-info mb-1 float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-pen"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-trash"></i></button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div v-show="!folder.length && !file.length" class="nothingfound">
+            <div class="nofiles"></div>
+            <span class="text-center">This folder is empty</span>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script src="https://unpkg.com/vue-toasted"></script>
+<script src="/js/app.js"></script>
+</body>
+
+</html>

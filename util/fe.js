@@ -9,8 +9,7 @@ const baseFolderURL = `${appDir}/../share/`
 
 async function init() {
     await checkShareFolder()
-    const data = await readDir()
-    printDir(data)
+    printDir(await readDir())
 }
 
 async function checkShareFolder() {
@@ -51,31 +50,51 @@ async function readDir(target = '') {
 function fileStat(basePath, file) {
     return new Promise(resolve => {
         fs.stat(basePath + '/' + file, (err, stats) => {
-            resolve(new FileItem(stats.isFile() ? '-f' : '-d', file, stats.size, moment(stats.mtimeMs).format('DD-M-YYYY hh:mm:ss')))
+            resolve(new FileItem(file, stats.isFile() ? '-f' : '-d', stats.size, moment(stats.mtimeMs).format('DD-M-YYYY hh:mm:ss'), path.join(basePath.replace(baseFolderURL, ''), file), []))
         })
     })
 }
 
 function makeDir(path = '') {
     fs.mkdir(baseFolderURL + path, {recursive: true}, (err) => {
-        console.log('sdfsd', err, !err)
         return !err
     })
 }
 async function createDirectory(path = '') {
     return new Promise(async (resolve, reject) => {
         fs.mkdir(baseFolderURL + path, {recursive: true}, (err) => {
-            if (err) reject(err);
-            else resolve();
+            if (err) reject(err)
+            else resolve()
         })
     }).then(() => true, err => false)
 
 }
 
+async function removeDirectory(path) {
+    return new Promise(async (resolve, reject) => {
+        if (!path) reject()
+        fs.rmdir(baseFolderURL + path, (err) => {
+            if (err) reject(err)
+            else resolve()
+        })
+    }).then(() => true, err => false)
+}
+
+async function renameDirectory(oldPath, newPath) {
+    return new Promise(async (resolve, reject) => {
+        if (!path) reject()
+        fs.rename(baseFolderURL + oldPath, baseFolderURL + newPath, (err) => {
+            if (err) reject(err);
+            else resolve();
+        })
+    }).then(() => true, err => false)
+}
 
 function printDir(records) {
     console.log('// Directory Content')
-    console.log(columnify(records))
+    console.log(columnify(records, {
+        include: ['type', 'name', 'size', 'dateModified']
+    }))
 }
 
 module.exports = {
@@ -85,5 +104,7 @@ module.exports = {
     readDir,
     makeDir,
     createDirectory,
+    removeDirectory,
+    renameDirectory,
     printDir
 }
