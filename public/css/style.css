@@ -536,3 +536,7 @@ footer #tzine-actions iframe{
 @media (max-width: 1024px) {
   #bsaHolder, footer{ display:none;}
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
