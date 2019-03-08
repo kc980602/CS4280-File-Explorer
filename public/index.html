@@ -14,7 +14,15 @@
         <a href="/"><img class="mb-3" src="img/sf-logo.svg" height="50px"/></a>
         <div class="">
             <div class="d-flex justify-content-between">
-                <div class="breadcrumbs">adadads</div>
+                <nav aria-label="breadcrumb text-white">
+                    <ol class="breadcrumb bg-transparent h4">
+                        <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                        <li v-for="(item, index) of currPath.slice(0, currPath.length-1)" class="breadcrumb-item"><a class="text-white"
+                                                                                                                     :href="'?path='+currPath.slice(0, index + 1).join('/')">{{item}}</a>
+                        </li>
+                        <li v-if="currPath[currPath.length-1]" class="breadcrumb-item active" aria-current="page">{{currPath[currPath.length-1]}}</li>
+                    </ol>
+                </nav>
                 <div class="form-inline">
                     <input type="text" class="form-control mr-2" v-model="addDirName">
                     <button class="btn btn-success iconbox shadow-success mr-2" @click="addDir()"><i class="fas fa-folder-plus"></i></button>
@@ -23,10 +31,10 @@
             </div>
         </div>
 
-        <ul class="data animated">
+        <ul class="data animated px-3">
             <li v-for="item of folder" class="folders p-3">
                 <div class="d-flex justify-content-between">
-                    <a :href="'/?path='+item.path" title="" class="files">
+                    <a :href="'/?path='+item.path" title="" class="files w-100">
                         <div class="media align-items-center">
                             <span class="icon folder full mr-3"></span>
                             <div class="media-body">
@@ -36,15 +44,15 @@
                         </div>
                     </a>
                     <div>
-                        <button class="btn btn-sm btn-outline-info mb-1 float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-pen"></i>
+                        <button class="btn-sm btn-outline-white mb-1 float-right ml-2" @click="openChangeNameModal(item.path)"><i
+                                class="fas fa-fw fa-pen"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-trash"></i></button>
+                        <button class="btn-sm btn-outline-white float-right" @click="delDir(item.path)"><i class="fas fa-fw fa-trash"></i></button>
                     </div>
                 </div>
-            </li><li
-                    v-for="item of file" class="files p-3">
+            </li><li v-for="item of file" class="files p-3">
                 <div class="d-flex justify-content-between">
-                    <a :href="'/?path='+item.path" title="" class="files">
+                    <a :href="'/?path='+item.path" title="" class="files w-100">
                         <div class="media align-items-center">
                             <span class="icon file mr-3" :class="'f-' + getFileType(item.name)">{{getFileType(item.name)}}</span>
                             <div class="media-body">
@@ -54,9 +62,11 @@
                         </div>
                     </a>
                     <div>
-                        <button class="btn btn-sm btn-outline-info mb-1 float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-pen"></i>
+                        <button class="btn-sm btn-outline-white mb-1 float-right" @click="openChangeNameModal(item.path)"><i
+                                class="fas fa-fw fa-pen"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger float-right" @click="deleteItem(213)"><i class="fas fa-fw fa-trash"></i></button>
+                        <button class="btn-sm btn-outline-white float-right ml-1" @click="delDir(item.path)"><i class="fas fa-fw fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </li>
@@ -67,6 +77,24 @@
             <span class="text-center">This folder is empty</span>
         </div>
 
+        <div class="modal fade" :class="{'show d-block': isModalShow}">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">Change name</h5>
+                        <button type="button" class="close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body py-3">
+                        <input type="text" class="form-control" placeholder="New name" v-model="newName">
+                    </div>
+                    <div class="modal-footer py-3 border-0">
+                        <button type="button" class="btn btn-success" @click="renameDir()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

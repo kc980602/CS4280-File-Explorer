@@ -24,4 +24,15 @@ router.post('/api/dir', errorHandler(async (req, res, next) => {
   res.json(json)
 }))
 
+router.delete('/api/dir', errorHandler(async (req, res, next) => {
+  const path = req.query.path.split('%20').join(' ')
+  const json = await feService.removeDirectory(path)
+  res.json()
+}))
+
+router.patch('/api/dir', errorHandler(async (req, res, next) => {
+  const json = await feService.renameDirectory(req.body.oldName, req.body.newName)
+  res.json(json)
+}))
+
 module.exports = router;

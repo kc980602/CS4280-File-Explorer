@@ -74,6 +74,7 @@ async function removeDirectory(path) {
     return new Promise(async (resolve, reject) => {
         if (!path) reject()
         fs.rmdir(baseFolderURL + path, (err) => {
+            console.log(err)
             if (err) reject(err)
             else resolve()
         })
@@ -82,8 +83,9 @@ async function removeDirectory(path) {
 
 async function renameDirectory(oldPath, newPath) {
     return new Promise(async (resolve, reject) => {
-        if (!path) reject()
+        if (!oldPath && !newPath) reject()
         fs.rename(baseFolderURL + oldPath, baseFolderURL + newPath, (err) => {
+            console.log(err)
             if (err) reject(err);
             else resolve();
         })

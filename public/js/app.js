@@ -6,17 +6,23 @@ new Vue({
         currPath: [],
         folder: [],
         file: [],
-        addDirName: ''
+        addDirName: '',
+        isModalShow: false,
+        oldName: '',
+        newName: ''
+
     },
     created() {
         const urlParams = new URLSearchParams(window.location.search)
         const path = urlParams.get('path')
-        this.getDir(path ? path : '/')
+        if (path) this.currPath = path.split('/')
 
+
+        this.getDir(path ? path : '/')
     },
     methods: {
         getDir(path = '/') {
-            axios.get(`/api/dir${path !== '/' ? '?path='+ path : ''}`)
+            axios.get(`/api/dir${path !== '/' ? '?path=' + path : ''}`)
                 .then(res => {
                     this.folder = res.data.folder
                     this.file = res.data.file
@@ -36,10 +42,34 @@ new Vue({
                 })
                 return
             }
-            axios.post('/api/dir', {path: this.addDirName.trim()})
+            const path = (this.currPath.length>0 ? this.currPath.join('/') + '/' : '') + this.addDirName.trim()
+            console.log(path)
+            axios.post('/api/dir', {path: path})
                 .then(res => {
                     this.addDirName = ''
-                    this.$toasted.show('Folder Created!', {
+                    this.$toasted.show('Folder created!', {
+                        position: 'bottom-right',
+                        duration: 3000,
+                        type: 'success',
+                        iconPack: 'fontawesome',
+                        icon: 'fa-check'
+                    })
+                    this.getDir(this.currPath.join('/'))
+                })
+                .catch(e => {
+                    this.$toasted.show(e.response.data.message, {
+                        position: 'bottom-right',
+                        duration: 3000,
+                        type: 'error',
+                        iconPack: 'fontawesome',
+                        icon: 'fa-times'
+                    })
+                })
+        },
+        delDir(path) {
+            axios.delete(`/api/dir${path !== '/' ? '?path=' + path : ''}`)
+                .then(res => {
+                    this.$toasted.show('Folder deleted!', {
                         position: 'bottom-right',
                         duration: 3000,
                         type: 'success',
@@ -58,8 +88,39 @@ new Vue({
                     })
                 })
         },
-        delDir(){
-
+        renameDir() {
+            if (!this.oldName && !this.newName) {
+                this.$toasted.show('New folder name cannot be empty!', {
+                    position: 'bottom-right',
+                    duration: 3000,
+                    type: 'error',
+                    iconPack: 'fontawesome',
+                    icon: 'fa-times'
+                })
+                return
+            }
+            axios.patch('/api/dir', {oldName: this.oldName, newName: this.newName})
+                .then(res => {
+                    this.$toasted.show('Name changed!', {
+                        position: 'bottom-right',
+                        duration: 3000,
+                        type: 'success',
+                        iconPack: 'fontawesome',
+                        icon: 'fa-check'
+                    })
+                    this.closeChangeNameModal()
+                    this.getDir()
+                })
+                .catch(e => {
+                    this.closeChangeNameModal()
+                    this.$toasted.show(e.response.data.message, {
+                        position: 'bottom-right',
+                        duration: 3000,
+                        type: 'error',
+                        iconPack: 'fontawesome',
+                        icon: 'fa-times'
+                    })
+                })
         },
         getFileType(name) {
             const type = name.split('.')
@@ -73,6 +134,16 @@ new Vue({
         },
         deleteItem(item) {
             console.log(item)
+        },
+        openChangeNameModal(path) {
+            this.isModalShow = true
+            this.oldName = path
+            this.newName = ''
+        },
+        closeChangeNameModal() {
+            this.isModalShow = false
+            this.oldName = ''
+            this.newName = ''
         }
     }
 })
