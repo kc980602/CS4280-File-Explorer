@@ -3,4 +3,10 @@
 
 shares/
 
+share/
+
+uploads/
+
 \.idea/
+
+\.DS_Store

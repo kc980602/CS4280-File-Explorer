@@ -78,9 +78,9 @@ async function cmdDeleteDir(cmdParts) {
     }
 
     let pathURL = path.join(...currPath, target)
-    const data = await fe.removeDirectory(pathURL)
+    const data = await fe.removeItem(pathURL)
     if (data) {
-        console.log('Directory deleted!')
+        console.log('Item deleted!')
         currPath = []
     } else {
         console.log('Directory is not empty or not found!')

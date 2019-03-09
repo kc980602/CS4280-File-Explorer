@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <title>CS4280 Share Folder</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/vendor.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+</head>
+<body>
+<div id="app">
+
+    <div class="filemanager">
+        <a href="/fe"><img class="mb-3" src="img/sf-logo.svg" height="50px"/></a>
+        <div class="">
+            <div class="d-flex justify-content-between">
+                <nav aria-label="breadcrumb text-white">
+                    <ol class="breadcrumb bg-transparent h4">
+                        <li class="breadcrumb-item"><a class="text-white" href="/fe">Home</a></li>
+                        <li v-for="(item, index) of currPath.slice(0, currPath.length-1)" class="breadcrumb-item">
+                            <a class="text-white" :href="'/fe?path='+currPath.slice(0, index + 1).join('/')">{{item}}</a>
+                        </li>
+                        <li v-if="currPath[currPath.length-1]" class="breadcrumb-item active" aria-current="page">{{currPath[currPath.length-1]}}</li>
+                    </ol>
+                </nav>
+                <div class="form-inline">
+                    <input type="text" class="form-control mr-2" v-model="addDirName">
+                    <button class="btn btn-success iconbox shadow-success mr-2" @click="addDir()"><i class="fas fa-folder-plus"></i></button>
+                    <button class="btn btn-success iconbox shadow-success" @click="openUploadModal()"><i class="fas fa-upload"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <ul class="data animated px-3">
+            <li v-for="item of folder" class="folders p-3">
+                <div class="d-flex justify-content-between">
+                    <a :href="'/fe?path='+item.path" title="" class="files w-100">
+                        <div class="media align-items-center">
+                            <span class="icon folder full mr-3" style="height: 60px;"></span>
+                            <div class="media-body">
+                                <span class="name">{{item.name}}</span>
+                                <span class="details">{{bytesToSize(item.size)}}<br>{{item.dateModified}}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div>
+                        <button class="btn-sm btn-outline-white mb-1 float-right ml-2" @click="openChangeNameModal(item.path)"><i
+                                class="fas fa-fw fa-pen"></i>
+                        </button>
+                        <button class="btn-sm btn-outline-white float-right" @click="delDir(item.path)"><i class="fas fa-fw fa-trash"></i></button>
+                    </div>
+                </div>
+            </li><li v-for="item of file" class="files p-3">
+                <div class="d-flex justify-content-between">
+                    <a :href="'/api/dir/download?file='+item.path" title="" class="files w-100">
+                        <div class="media align-items-center">
+                            <span class="icon file mr-3" :class="'f-' + getFileType(item.name)" style="height: 60px;">{{getFileType(item.name)}}</span>
+                            <div class="media-body">
+                                <span class="name">{{item.name}}</span>
+                                <span class="details">{{bytesToSize(item.size)}}<br>{{item.dateModified}}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div>
+                        <button class="btn-sm btn-outline-white mb-1 float-right" @click="openChangeNameModal(item.path)"><i
+                                class="fas fa-fw fa-pen"></i>
+                        </button>
+                        <button class="btn-sm btn-outline-white float-right ml-1" @click="delDir(item.path)"><i class="fas fa-fw fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div v-show="!folder.length && !file.length" class="nothingfound">
+            <div class="nofiles"></div>
+            <span class="text-center">This folder is empty</span>
+        </div>
+
+        <div class="modal fade" :class="{'show d-block': isCNModalShow}">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">Change name</h5>
+                        <button type="button" class="close" @click="closeChangeNameModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body py-3">
+                        <input type="text" class="form-control" placeholder="New name" v-model="newName">
+                    </div>
+                    <div class="modal-footer py-3 border-0">
+                        <button type="button" class="btn btn-success" @click="renameDir()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" :class="{'show d-block': isULModalShow}">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">Upload file</h5>
+                        <button type="button" class="close" @click="closeUploadModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body py-3">
+                        <div class="btn btn-outline-secondary">
+                            <input class="top-0 right-0" type="file" id="file" ref="file" @change="handleFileUpload()"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer py-3 border-0">
+                        <button type="button" class="btn btn-success" @click="writeFile()">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script src="https://unpkg.com/vue-toasted"></script>
+<script src="/js/app.js"></script>
+</body>
+
+</html>

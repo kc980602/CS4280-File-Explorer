@@ -50,7 +50,7 @@ async function readDir(target = '') {
 function fileStat(basePath, file) {
     return new Promise(resolve => {
         fs.stat(basePath + '/' + file, (err, stats) => {
-            resolve(new FileItem(file, stats.isFile() ? '-f' : '-d', stats.size, moment(stats.mtimeMs).format('DD-M-YYYY hh:mm:ss'), path.join(basePath.replace(baseFolderURL, ''), file), []))
+            resolve(new FileItem(file, stats.isFile() ? '-f' : '-d', stats.size, moment(stats.mtimeMs).format('DD-MM-YYYY hh:mm:ss'), path.join(basePath.replace(baseFolderURL, ''), file), []))
         })
     })
 }
@@ -70,13 +70,23 @@ async function createDirectory(path = '') {
 
 }
 
-async function removeDirectory(path) {
+async function removeItem(path) {
     return new Promise(async (resolve, reject) => {
         if (!path) reject()
-        fs.rmdir(baseFolderURL + path, (err) => {
-            console.log(err)
-            if (err) reject(err)
-            else resolve()
+        fs.stat(baseFolderURL + path, (err, stats) => {
+            if (stats.isDirectory()) {
+                fs.rmdir(baseFolderURL + path, (err) => {
+                    console.log(err)
+                    if (err) reject(err)
+                    else resolve()
+                })
+            } else {
+                fs.unlink(baseFolderURL + path, (err) => {
+                    console.log(err)
+                    if (err) reject(err)
+                    else resolve()
+                })
+            }
         })
     }).then(() => true, err => false)
 }
@@ -89,6 +99,19 @@ async function renameDirectory(oldPath, newPath) {
             if (err) reject(err);
             else resolve();
         })
+    }).then(() => true, err => false)
+}
+
+async function writeFile(target = '', file) {
+    return new Promise(async (resolve, reject) => {
+        fs.readFile(file.path, function (err, data) {
+            console.log('sdfsdf', baseFolderURL + path.join(target, file.originalname))
+            fs.writeFile(baseFolderURL + path.join(target, file.originalname), data, function (err) {
+                if (err) reject(err);
+                else resolve();
+            });
+        })
+
     }).then(() => true, err => false)
 }
 
@@ -106,7 +129,8 @@ module.exports = {
     readDir,
     makeDir,
     createDirectory,
-    removeDirectory,
     renameDirectory,
+    writeFile,
+    removeItem,
     printDir
 }

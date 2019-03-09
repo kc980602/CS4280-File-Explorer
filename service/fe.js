@@ -21,8 +21,8 @@ async function addDirectory(path) {
     }
 }
 
-async function removeDirectory(path) {
-    const data = await fe.removeDirectory(path)
+async function removeItem(path) {
+    const data = await fe.removeItem(path)
     if (!data) throw {code: 400, message: 'Fail to remove item!'}
     return {
         success: data
@@ -37,9 +37,18 @@ async function renameDirectory(oldPath, newPath) {
     }
 }
 
+async function writeFile(path, file) {
+    const data = await fe.writeFile(path, file)
+    if (!data) throw {code: 400, message: 'Fail to write item!'}
+    return {
+        success: data
+    }
+}
+
 module.exports = {
     readDirectory,
     addDirectory,
-    removeDirectory,
-    renameDirectory
+    removeItem,
+    renameDirectory,
+    writeFile
 }

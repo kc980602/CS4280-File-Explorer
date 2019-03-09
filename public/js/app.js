@@ -7,16 +7,16 @@ new Vue({
         folder: [],
         file: [],
         addDirName: '',
-        isModalShow: false,
+        isCNModalShow: false,
+        isULModalShow: false,
         oldName: '',
-        newName: ''
-
+        newName: '',
+        uploadFile: ''
     },
     created() {
         const urlParams = new URLSearchParams(window.location.search)
         const path = urlParams.get('path')
         if (path) this.currPath = path.split('/')
-
 
         this.getDir(path ? path : '/')
     },
@@ -42,7 +42,7 @@ new Vue({
                 })
                 return
             }
-            const path = (this.currPath.length>0 ? this.currPath.join('/') + '/' : '') + this.addDirName.trim()
+            const path = (this.currPath.length > 0 ? this.currPath.join('/') + '/' : '') + this.addDirName.trim()
             console.log(path)
             axios.post('/api/dir', {path: path})
                 .then(res => {
@@ -54,7 +54,7 @@ new Vue({
                         iconPack: 'fontawesome',
                         icon: 'fa-check'
                     })
-                    this.getDir(this.currPath.join('/'))
+                    location.replace('/fe?path=' + this.currPath.join('/'))
                 })
                 .catch(e => {
                     this.$toasted.show(e.response.data.message, {
@@ -76,7 +76,7 @@ new Vue({
                         iconPack: 'fontawesome',
                         icon: 'fa-check'
                     })
-                    this.getDir()
+                    location.replace('/fe?path=' + this.currPath.join('/'))
                 })
                 .catch(e => {
                     this.$toasted.show(e.response.data.message, {
@@ -109,10 +109,47 @@ new Vue({
                         icon: 'fa-check'
                     })
                     this.closeChangeNameModal()
-                    this.getDir()
+                    location.replace('/fe?path=' + this.currPath.join('/'))
                 })
                 .catch(e => {
                     this.closeChangeNameModal()
+                    this.$toasted.show(e.response.data.message, {
+                        position: 'bottom-right',
+                        duration: 3000,
+                        type: 'error',
+                        iconPack: 'fontawesome',
+                        icon: 'fa-times'
+                    })
+                })
+        },
+        writeFile() {
+            if (!this.uploadFile) {
+                this.$toasted.show('File must me specified!', {
+                    position: 'bottom-right',
+                    duration: 3000,
+                    type: 'error',
+                    iconPack: 'fontawesome',
+                    icon: 'fa-times'
+                })
+                return
+            }
+            const formData = new FormData()
+            formData.append('file', this.uploadFile)
+            formData.append('path', (this.currPath.length > 0 ? this.currPath.join('/') + '/' : ''))
+            axios.post('/api/dir/upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+                .then(res => {
+                    this.addDirName = ''
+                    this.$toasted.show('File uploaded!', {
+                        position: 'bottom-right',
+                        duration: 3000,
+                        type: 'success',
+                        iconPack: 'fontawesome',
+                        icon: 'fa-check'
+                    })
+                    this.closeUploadModal()
+                    location.replace('/fe?path=' + this.currPath.join('/'))
+                })
+                .catch(e => {
                     this.$toasted.show(e.response.data.message, {
                         position: 'bottom-right',
                         duration: 3000,
@@ -136,14 +173,25 @@ new Vue({
             console.log(item)
         },
         openChangeNameModal(path) {
-            this.isModalShow = true
+            this.isCNModalShow = true
             this.oldName = path
             this.newName = ''
         },
         closeChangeNameModal() {
-            this.isModalShow = false
+            this.isCNModalShow = false
             this.oldName = ''
             this.newName = ''
+        },
+        openUploadModal(path) {
+            this.isULModalShow = true
+            this.uploadFile = ''
+        },
+        closeUploadModal() {
+            this.isULModalShow = false
+            this.uploadFile = ''
+        },
+        handleFileUpload() {
+            this.uploadFile = this.$refs.file.files[0];
         }
     }
 })
